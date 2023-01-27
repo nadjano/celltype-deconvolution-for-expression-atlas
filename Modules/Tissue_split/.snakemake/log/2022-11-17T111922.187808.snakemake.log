@@ -1,0 +1,8 @@
+Building DAG of jobs...
+MissingInputException in rule tissue_split in line 23 of /nfs/production/irene/ma/users/nnolte/ATLAS_DECONVOLUTION/Modules/Tissue_split/Snakefile:
+Missing input files for rule tissue_split:
+    output: Tissue_split/E-MTAB-513-fpkms.tsv.undecorated_lung
+    wildcards: sample=E-MTAB-513, tissue=lung
+    affected files:
+        Input/E-MTAB-513-fpkms.tsv.undecorated
+        Input/E-MTAB-513.sdrf.txt

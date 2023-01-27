@@ -1,0 +1,49 @@
+## Rule index for DWLS deconv
+##
+## @zgr2788
+##
+##
+## Description:
+## This file includes the rule to run DWLS with C0 reference.
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+
+rule DWLS_run:
+    input:
+        #getPhenData(getC0(getBulks('{sample}'), '{sample}'), '{sample}')
+        T = 'Tissue_splits/Normalized_tables/{sample}-{tissue}-fpkms_scaled.rds', 
+        C = 'sc_References/Normalized_tables/{tissue}_C0_scaled.rds',
+        Phen = 'sc_References/Raw/{tissue}_phenData.rds'
+        
+    output:
+        "Output/{sample}_{tissue}_res_DWLS.rds"
+
+    conda:
+        "env.yaml"
+
+    #threads: config["cores"]["DWLS"]
+    threads: 16
+
+   #benchmark:
+    #    "Benchmarks/{sample}_DWLS_benchmark.txt"
+
+    #resources:
+     #   mem_mb=getMB(config['mem_gb']['DWLS'])
+
+    shell:
+        """
+        mkdir -p {wildcards.sample}_scratch
+        mkdir -p Output
+        Rscript Modules/DWLS/DWLS_run.R {input.T} {input.C} {input.Phen} {threads} {output} {wildcards.sample}_scratch
+        """

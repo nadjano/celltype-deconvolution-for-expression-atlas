@@ -1,0 +1,40 @@
+## Check if single cell reference for tissue is avaiblabel
+##
+## 
+##
+##
+## 
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+
+rule check_if_reference_exists:
+    input:
+        raw_dir= "sc_References/Raw",
+        tabula_sapiens= "/nfs/production/irene/ma/users/nnolte/DECONVOLUTION/tabula_sapiens/tabula_sapiens_celltype_tissue.rds"
+
+    output:
+        'sc_References/Raw/{tissue}_C0.rds'
+
+    conda:
+        "env.yaml"
+
+    #threads: config["cores"]["DWLS"]
+
+    #resources:
+     #   mem_mb=getMB(config['mem_gb']['DWLS'])
+
+    shell:
+        """
+        Rscript Modules/TissueReference/getTissueReference.R {wildcards.tissue} {input.tabula_sapiens} {output} 
+        """

@@ -1,0 +1,53 @@
+## C tables generation to serve as reference for supervised methods
+##
+## @zgr2788
+##
+##
+## Description:
+## Generates single cell references for supervised / semi-supervised
+## deconvolution methods. Since the methods require different types, the
+## generated references also vary in type. The following convention is
+## used:
+##
+##
+##      Type 0: Single cell expression matrix (C0)
+##
+##      Type 1: Mean of gene raw counts (rows) by cell types (columns) (C1)
+##      -also at this step, refVar table (Standard deviations of rows by cell types)
+##
+##      Type 2: Marker genes list with respect to cell types (C2)
+##
+##
+
+rule generateReferences:
+    input:
+        'sc_References/Raw/{tissue}_C0.rds'
+
+    output:
+        'sc_References/C1/{tissue}_C1.rds',
+        'sc_References/C1/{tissue}_refVar.rds',
+        'sc_References/C1/{tissue}_phenData.rds'
+
+    params:
+        #method = config['stParam']['transform'],
+        method = 'none'
+
+
+    conda:
+        'env.yaml'
+
+    #threads: config['cores']['c_gen']
+
+    #benchmark:
+     #   "Benchmarks/{sample}_Cgen_benchmark.txt"
+
+    #resources:
+     #   mem_mb=getMB(config['mem_gb']['c_gen'])
+
+    shell:
+        """
+        mkdir -p Input/References
+        Rscript Modules/C1Reference/genRef_1.R {input} {params.method}
+        """
+
+

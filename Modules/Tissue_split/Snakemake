@@ -1,0 +1,42 @@
+## Rule split counts by tissue
+##
+## @zgr2788
+##
+##
+## Description:
+## This file splits bulk counts file into tissues if runs from multiple tissues 
+## are present.
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+##
+
+rule tissue_split:
+    input:
+        counts="Input/{sample}-fpkms.tsv",
+        sdrf="Input/{sample}-experiment-design.tsv"
+
+    output:
+        "Tissue_splits/{sample}-{tissue}-fpkms.rds" 
+
+    conda:
+        "env.yaml"
+
+    #threads: config["cores"]["DWLS"]
+
+    #resources:
+     #   mem_mb=getMB(config['mem_gb']['DWLS'])
+
+    shell:
+        """
+        Rscript Modules/Tissue_split/splitCountsByTissue.R {input.counts} {input.sdrf} {wildcards.sample} {output} 
+        """
